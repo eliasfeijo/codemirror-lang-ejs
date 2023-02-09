@@ -1,0 +1,37 @@
+{
+  "name": "codemirror-lang-ejs",
+  "version": "0.1.0",
+  "description": "EJS language support for CodeMirror v6",
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "keywords": [
+    "codemirror",
+    "language",
+    "ejs"
+  ],
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "sideEffects": false,
+  "dependencies": {
+    "@codemirror/lang-javascript": "^6.1.3",
+    "@codemirror/language": "^6.5.0",
+    "@lezer/common": "^1.0.2",
+    "@lezer/lr": "^1.1.3"
+  },
+  "devDependencies": {
+    "@lezer/generator": "^1.2.2",
+    "rollup": "^3.14.0",
+    "rollup-plugin-dts": "^5.1.1",
+    "rollup-plugin-ts": "^3.2.0",
+    "typescript": "^4.9.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eliasfeijo/codemirror-lang-ejs.git"
+  },
+  "author": "Elias Feijó",
+  "license": "MIT"
+}

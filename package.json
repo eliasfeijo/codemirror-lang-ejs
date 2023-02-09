@@ -1,7 +1,7 @@
 {
   "name": "codemirror-lang-ejs",
   "version": "0.1.0",
-  "description": "EJS language support for CodeMirror v6",
+  "description": "EJS templating language support for CodeMirror v6",
   "scripts": {
     "build": "rollup -c"
   },

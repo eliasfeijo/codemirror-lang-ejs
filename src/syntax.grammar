@@ -1,0 +1,35 @@
+@top Program { expression }
+
+expression { OpeningTag JavascriptExpression ClosingTag | Text }
+
+@skip {} {
+  Comment { "<%#" (CommentContent | commentNewLine)* commentEnd }
+}
+
+@skip { space | Comment }
+
+@local tokens {
+  commentEnd[@name=ClosingTag] { ClosingTag }
+  commentNewLine { "\n" }
+  @else CommentContent
+}
+
+@tokens {
+  space { @whitespace+ }
+  OpeningTag[closedBy=ClosingTag] { ScripletTag | WhitespaceSlurpingTag | OutputTag | OutputUnescapedTag | LiteralPercentTag }
+  ClosingTag[openedBy=OpeningTag] { (PlainClosingTag | WhitespaceSlurpingClosingTag | TrimClosingTag) @eof? }
+  // Opening tags
+  ScripletTag { "<%" }
+  WhitespaceSlurpingTag { ScripletTag "_" }
+  OutputTag { ScripletTag "=" }
+  OutputUnescapedTag { ScripletTag "-" }
+  LiteralPercentTag { ScripletTag "%" }
+  // Closing tags
+  PlainClosingTag { "%>" }
+  WhitespaceSlurpingClosingTag { "_" PlainClosingTag }
+  TrimClosingTag { "-" PlainClosingTag }
+}
+
+@external tokens javascriptExpressionOrText from "./tokens" { JavascriptExpression, Text }
+
+@detectDelim

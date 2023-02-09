@@ -1,4 +1,6 @@
 /src
 /node_modules
+/.github
+.gitignore
 rollup.config.js
 tsconfig.json

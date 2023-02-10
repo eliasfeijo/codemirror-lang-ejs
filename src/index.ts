@@ -16,7 +16,7 @@ export const ejsLanguage = LRLanguage.define({
         JavascriptExpression: delimitedIndent({ closing: "%>", align: false }),
       }),
       styleTags({
-        "OpeningTag ClosingTag": t.controlOperator,
+        "OutputTag OpeningTag ClosingTag": t.controlOperator,
         CommentContent: t.comment,
         Quote: t.quote,
       }),

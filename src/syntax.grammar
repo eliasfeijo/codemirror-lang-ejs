@@ -1,6 +1,13 @@
 @top Program { expression }
 
-expression { OpeningTag JavascriptExpression ClosingTag | Text }
+expression {
+  ejsExpression |
+  ( quoteSingle ejsExpression quoteSingle ) |
+  ( quoteDouble ejsExpression quoteDouble ) |
+  Text
+}
+
+ejsExpression {  OpeningTag JavascriptExpression ClosingTag}
 
 @skip {} {
   Comment { "<%#" (CommentContent | commentNewLine)* commentEnd }
@@ -9,13 +16,15 @@ expression { OpeningTag JavascriptExpression ClosingTag | Text }
 @skip { space | Comment }
 
 @local tokens {
-  commentEnd[@name=ClosingTag] { ClosingTag }
+  commentEnd { ClosingTag }
   commentNewLine { "\n" }
   @else CommentContent
 }
 
 @tokens {
   space { @whitespace+ }
+  quoteSingle[@name=Quote] { "'" }
+  quoteDouble[@name=Quote] { '"' }
   OpeningTag[closedBy=ClosingTag] { ScripletTag | WhitespaceSlurpingTag | OutputTag | OutputUnescapedTag | LiteralPercentTag }
   ClosingTag[openedBy=OpeningTag] { (PlainClosingTag | WhitespaceSlurpingClosingTag | TrimClosingTag) @eof? }
   // Opening tags

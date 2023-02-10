@@ -5,23 +5,37 @@ const percent = 37;
 const closeAngle = 62;
 const dash = 45;
 const underscore = 95;
+const openAngle = 60;
+const singleQuote = 39;
+const doubleQuote = 34;
 
 export const javascriptExpressionOrText = new ExternalTokenizer(
   (input, stack) => {
     let { next } = input;
-    while (
-      next !== -1 &&
-      next !== percent &&
-      (input.peek(1) !== closeAngle ||
-        ([dash, underscore].indexOf(input.peek(1)) > -1 &&
-          input.peek(2) !== closeAngle))
-    ) {
+    while (next !== -1) {
+      if (
+        ((next === singleQuote || next === doubleQuote) &&
+          input.peek(1) === openAngle &&
+          input.peek(2) === percent) ||
+        (next === openAngle && input.peek(1) === percent)
+      ) {
+        break;
+      }
+      if (
+        next === percent &&
+        (([dash, underscore].indexOf(input.peek(1)) > -1 &&
+          input.peek(2) === closeAngle) ||
+          input.peek(1) === closeAngle)
+      ) {
+        break;
+      }
       next = input.advance();
     }
-    const token = stack.canShift(JavascriptExpression)
-      ? JavascriptExpression
-      : Text;
-    input.acceptToken(token);
+    if (stack.canShift(JavascriptExpression)) {
+      input.acceptToken(JavascriptExpression);
+    } else if (stack.canShift(Text)) {
+      input.acceptToken(Text);
+    }
   },
   { contextual: true }
 );

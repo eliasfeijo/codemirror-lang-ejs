@@ -18,6 +18,7 @@ export const ejsLanguage = LRLanguage.define({
       styleTags({
         "OpeningTag ClosingTag": t.strong,
         CommentContent: t.comment,
+        Quote: t.quote,
       }),
     ],
     wrap: parseMixed((node) =>

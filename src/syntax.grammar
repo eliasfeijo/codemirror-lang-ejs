@@ -7,7 +7,10 @@ expression {
   Text
 }
 
-ejsExpression {  OpeningTag JavascriptExpression ClosingTag}
+ejsExpression { Scriptlet | Output }
+
+Scriptlet { OpeningTag JavascriptExpression ClosingTag}
+Output { OutputTag JavascriptExpression ClosingTag }
 
 @skip {} {
   Comment { "<%#" (CommentContent | commentNewLine)* commentEnd }
@@ -25,18 +28,25 @@ ejsExpression {  OpeningTag JavascriptExpression ClosingTag}
   space { @whitespace+ }
   quoteSingle[@name=Quote] { "'" }
   quoteDouble[@name=Quote] { '"' }
+  
   OpeningTag[closedBy=ClosingTag] { ScripletTag | WhitespaceSlurpingTag | OutputTag | OutputUnescapedTag | LiteralPercentTag }
   ClosingTag[openedBy=OpeningTag] { (PlainClosingTag | WhitespaceSlurpingClosingTag | TrimClosingTag) @eof? }
+  
+  @precedence { OutputTag, OpeningTag }
+  
   // Opening tags
   ScripletTag { "<%" }
-  WhitespaceSlurpingTag { ScripletTag "_" }
   OutputTag { ScripletTag "=" }
+  WhitespaceSlurpingTag { ScripletTag "_" }
   OutputUnescapedTag { ScripletTag "-" }
   LiteralPercentTag { ScripletTag "%" }
+  
   // Closing tags
   PlainClosingTag { "%>" }
   WhitespaceSlurpingClosingTag { "_" PlainClosingTag }
   TrimClosingTag { "-" PlainClosingTag }
+
+  "="
 }
 
 @external tokens javascriptExpressionOrText from "./tokens" { JavascriptExpression, Text }

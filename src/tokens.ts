@@ -22,10 +22,10 @@ export const javascriptExpressionOrText = new ExternalTokenizer(
         break;
       }
       if (
-        next === percent &&
-        (([dash, underscore].indexOf(input.peek(1)) > -1 &&
+        ([dash, underscore].indexOf(next) > -1 &&
+          input.peek(1) === percent &&
           input.peek(2) === closeAngle) ||
-          input.peek(1) === closeAngle)
+        (next === percent && input.peek(1) === closeAngle)
       ) {
         break;
       }
